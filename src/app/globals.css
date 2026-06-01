@@ -70,14 +70,6 @@
   --font-body:    var(--font-dm-sans), system-ui, sans-serif;
   --font-mono:    var(--font-dm-mono), ui-monospace, monospace;
 
-  /* Spacing */
-  --spacing-xs:  var(--space-xs);
-  --spacing-sm:  var(--space-sm);
-  --spacing-md:  var(--space-md);
-  --spacing-lg:  var(--space-lg);
-  --spacing-xl:  var(--space-xl);
-  --spacing-2xl: var(--space-2xl);
-
   /* Border radius */
   --radius-sm:   var(--radius-sm);
   --radius-md:   var(--radius-md);
@@ -92,10 +84,13 @@
 }
 
 /* ─── BASE RESET ─── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Wrapped in @layer base so Tailwind utility classes (in @layer utilities) keep higher priority */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
