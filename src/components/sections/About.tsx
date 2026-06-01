@@ -65,7 +65,7 @@ export function About() {
       <div className="max-w-6xl mx-auto">
         {/* Section label */}
         <p className="font-mono text-xs tracking-[0.3em] uppercase text-[--color-text-faint] mb-12">
-          // about
+          {"// about"}
         </p>
 
         <div className="grid md:grid-cols-2 gap-16 items-start">

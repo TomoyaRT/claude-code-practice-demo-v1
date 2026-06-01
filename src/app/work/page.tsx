@@ -43,7 +43,7 @@ export default function WorkPage() {
         {/* Header */}
         <div ref={headingRef} className="mb-20">
           <p className="font-mono text-xs tracking-[0.3em] uppercase text-[--color-text-faint] mb-6">
-            // work
+            {"// work"}
           </p>
           <h1 className="font-[family-name:--font-heading] text-5xl md:text-6xl font-bold text-[--color-text] tracking-tight mb-6">
             Selected Projects

@@ -3,6 +3,7 @@ import type { ContactFormData } from "@/lib/validations"
 
 const FROM_EMAIL = "onboarding@resend.dev"
 const TO_EMAIL   = process.env.CONTACT_EMAIL ?? "worth22focus3000@gmail.com"
+// NOTE: Set CONTACT_EMAIL env var in production. The fallback is intentional for MVP.
 
 export interface EmailResult {
   success: boolean

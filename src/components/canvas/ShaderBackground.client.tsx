@@ -29,7 +29,11 @@ export function ShaderBackgroundClient() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-    setReducedMotion(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    mq.addEventListener("change", handler)
+    // Dispatch a synthetic event to read the current value via the handler
+    handler({ matches: mq.matches } as MediaQueryListEvent)
+    return () => mq.removeEventListener("change", handler)
   }, [])
 
   if (reducedMotion) {

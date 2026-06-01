@@ -19,7 +19,10 @@ const navLinks: NavLink[] = [
 export function Header() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  // Store the pathname at which the menu was opened so it auto-closes on navigation
+  const [menuOpenPath, setMenuOpenPath] = useState<string | null>(null)
+
+  const menuOpen = menuOpenPath === pathname
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48)
@@ -27,11 +30,8 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [pathname])
-
-  const toggleMenu = () => setMenuOpen((prev) => !prev)
+  const toggleMenu = () =>
+    setMenuOpenPath((prev) => (prev === pathname ? null : pathname))
 
   return (
     <header

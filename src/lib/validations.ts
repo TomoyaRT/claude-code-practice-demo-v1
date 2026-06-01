@@ -5,7 +5,8 @@ export const contactSchema = z.object({
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(100, "Name must be under 100 characters")
-    .trim(),
+    .trim()
+    .regex(/^[^\r\n]*$/, "Name must not contain newlines"),
   email: z
     .string()
     .email("Please enter a valid email address")
@@ -16,7 +17,8 @@ export const contactSchema = z.object({
     .string()
     .min(3, "Subject must be at least 3 characters")
     .max(200, "Subject must be under 200 characters")
-    .trim(),
+    .trim()
+    .regex(/^[^\r\n]*$/, "Subject must not contain newlines"),
   message: z
     .string()
     .min(20, "Message must be at least 20 characters")
