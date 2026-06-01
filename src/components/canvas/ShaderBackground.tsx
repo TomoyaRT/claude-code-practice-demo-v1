@@ -49,9 +49,28 @@ function buildFireflies(): Firefly[] {
   return flies
 }
 
+function makeGlowTexture(): THREE.CanvasTexture {
+  const size = 128
+  const canvas = document.createElement("canvas")
+  canvas.width  = size
+  canvas.height = size
+  const ctx = canvas.getContext("2d")!
+  const r = size / 2
+  const grad = ctx.createRadialGradient(r, r, 0, r, r, r)
+  grad.addColorStop(0,    "rgba(255,255,255,1)")
+  grad.addColorStop(0.15, "rgba(255,255,255,0.85)")
+  grad.addColorStop(0.4,  "rgba(255,255,255,0.25)")
+  grad.addColorStop(0.7,  "rgba(255,255,255,0.05)")
+  grad.addColorStop(1,    "rgba(255,255,255,0)")
+  ctx.fillStyle = grad
+  ctx.fillRect(0, 0, size, size)
+  return new THREE.CanvasTexture(canvas)
+}
+
 function FireflyField() {
   const pointsRef = useRef<THREE.Points>(null)
   const fireflies = useMemo(() => buildFireflies(), [])
+  const glowMap   = useMemo(() => makeGlowTexture(), [])
 
   const { positions, colors, sizes } = useMemo(() => {
     const positions = new Float32Array(FIREFLY_COUNT * 3)
@@ -134,12 +153,14 @@ function FireflyField() {
         <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.08}
+        map={glowMap}
+        size={0.22}
         vertexColors
         transparent
         opacity={1}
         sizeAttenuation
         depthWrite={false}
+        alphaTest={0.001}
         blending={THREE.AdditiveBlending}
       />
     </points>
