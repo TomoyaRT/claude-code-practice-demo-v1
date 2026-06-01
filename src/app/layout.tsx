@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google"
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
+import { CustomCursor } from "@/components/ui/CustomCursor"
+import { PageTransition } from "@/components/layout/PageTransition"
 import "./globals.css"
 
 const spaceGrotesk = Space_Grotesk({
@@ -50,9 +52,12 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${dmSans.variable} ${dmMono.variable}`}
     >
       <body className="min-h-screen bg-[--color-bg] text-[--color-text] antialiased flex flex-col">
+        <CustomCursor />
         <Header />
         <main className="flex-1 pt-20">
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </main>
         <Footer />
       </body>
