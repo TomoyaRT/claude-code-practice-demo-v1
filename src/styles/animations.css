@@ -1,0 +1,151 @@
+/* ─── ENTRANCE ANIMATIONS ─── */
+@keyframes enter-from-bottom {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes enter-from-top {
+  from { opacity: 0; transform: translateY(-32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes enter-from-left {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes enter-from-right {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── CONTINUOUS ANIMATIONS ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 4px 0px rgba(100, 255, 218, 0.2),
+                0 0 8px 0px rgba(100, 255, 218, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 12px 2px rgba(100, 255, 218, 0.5),
+                0 0 24px 4px rgba(100, 255, 218, 0.25);
+  }
+}
+
+@keyframes text-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes border-rotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─── ANIMATION UTILITIES ─── */
+.animate-enter-bottom {
+  animation: enter-from-bottom var(--duration-slow) var(--ease-out) both;
+}
+
+.animate-enter-top {
+  animation: enter-from-top var(--duration-slow) var(--ease-out) both;
+}
+
+.animate-enter-left {
+  animation: enter-from-left var(--duration-slow) var(--ease-out) both;
+}
+
+.animate-enter-right {
+  animation: enter-from-right var(--duration-slow) var(--ease-out) both;
+}
+
+.animate-scale-in {
+  animation: scale-in var(--duration-base) var(--ease-spring) both;
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-base) var(--ease-smooth) both;
+}
+
+.animate-float {
+  animation: float 4s var(--ease-smooth) infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* ─── SHIMMER TEXT GRADIENT ─── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-text-muted) 0%,
+    var(--color-accent) 30%,
+    var(--color-text) 50%,
+    var(--color-accent) 70%,
+    var(--color-text-muted) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 4s linear infinite;
+}
+
+/* ─── STAGGER DELAYS ─── */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+
+/* ─── REDUCED MOTION OVERRIDE ─── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-enter-bottom,
+  .animate-enter-top,
+  .animate-enter-left,
+  .animate-enter-right,
+  .animate-scale-in,
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .animate-float,
+  .animate-glow-pulse,
+  .animate-spin-slow {
+    animation: none;
+  }
+
+  .text-shimmer {
+    animation: none;
+    -webkit-text-fill-color: var(--color-text);
+    background: none;
+  }
+}

@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /* ─── FONT VARIABLES (set by next/font in layout.tsx) ─── */
-/* --font-heading: Space Grotesk (loaded in layout.tsx)     */
-/* --font-body:    DM Sans (loaded in layout.tsx)           */
+/* --font-space-grotesk: Space Grotesk (loaded in layout.tsx) */
+/* --font-dm-sans:       DM Sans (loaded in layout.tsx)       */
+/* --font-dm-mono:       DM Mono (loaded in layout.tsx)       */
 
 /* ─── DESIGN TOKENS ─── */
 :root {
@@ -50,19 +51,44 @@
 
 /* ─── TAILWIND V4 THEME EXTENSION ─── */
 @theme inline {
-  --color-bg:           var(--color-bg);
-  --color-bg-2:         var(--color-bg-2);
-  --color-bg-card:      var(--color-bg-card);
-  --color-border:       var(--color-border);
-  --color-accent:       var(--color-accent);
-  --color-accent-2:     var(--color-accent-2);
-  --color-text:         var(--color-text);
-  --color-text-muted:   var(--color-text-muted);
-  --color-text-faint:   var(--color-text-faint);
+  /* Colors */
+  --color-bg:            var(--color-bg);
+  --color-bg-2:          var(--color-bg-2);
+  --color-bg-card:       var(--color-bg-card);
+  --color-border:        var(--color-border);
+  --color-border-hover:  var(--color-border-hover);
+  --color-accent:        var(--color-accent);
+  --color-accent-dim:    var(--color-accent-dim);
+  --color-accent-2:      var(--color-accent-2);
+  --color-accent-2-dim:  var(--color-accent-2-dim);
+  --color-text:          var(--color-text);
+  --color-text-muted:    var(--color-text-muted);
+  --color-text-faint:    var(--color-text-faint);
 
+  /* Fonts */
   --font-heading: var(--font-space-grotesk), system-ui, sans-serif;
   --font-body:    var(--font-dm-sans), system-ui, sans-serif;
   --font-mono:    var(--font-dm-mono), ui-monospace, monospace;
+
+  /* Spacing */
+  --spacing-xs:  var(--space-xs);
+  --spacing-sm:  var(--space-sm);
+  --spacing-md:  var(--space-md);
+  --spacing-lg:  var(--space-lg);
+  --spacing-xl:  var(--space-xl);
+  --spacing-2xl: var(--space-2xl);
+
+  /* Border radius */
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-full: var(--radius-full);
+
+  /* Animation easings (exposed for arbitrary value usage) */
+  --ease-smooth: var(--ease-smooth);
+  --ease-spring: var(--ease-spring);
+  --ease-in:     var(--ease-in);
+  --ease-out:    var(--ease-out);
 }
 
 /* ─── BASE RESET ─── */

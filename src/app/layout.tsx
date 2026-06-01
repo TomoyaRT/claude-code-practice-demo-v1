@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import { Space_Grotesk, DM_Sans, DM_Mono } from "next/font/google"
+import { Header } from "@/components/layout/Header"
+import { Footer } from "@/components/layout/Footer"
 import "./globals.css"
 
 const spaceGrotesk = Space_Grotesk({
@@ -47,8 +49,12 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${dmSans.variable} ${dmMono.variable}`}
     >
-      <body className="min-h-screen bg-[--color-bg] text-[--color-text] antialiased">
-        {children}
+      <body className="min-h-screen bg-[--color-bg] text-[--color-text] antialiased flex flex-col">
+        <Header />
+        <main className="flex-1 pt-20">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   )
