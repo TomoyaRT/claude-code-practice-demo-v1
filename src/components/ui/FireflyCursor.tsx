@@ -2,58 +2,55 @@
 
 import { useEffect, useRef } from "react"
 
-// ── Constants ──────────────────────────────────────────────────────────────
-const N          = 6      // number of cursor fireflies
-const SPRING_K   = 9      // spring constant
-const DAMP_C     = 4.5    // velocity damping coefficient
-const OSC_AMP    = 16     // px — perpendicular oscillation amplitude
-const OSC_FREQ   = 3.2    // rad/s — oscillation frequency
+// ── Config ─────────────────────────────────────────────────────────────────
+const N           = 5      // few fireflies — cursor-scale
+const VANISH_DIST = 22     // px: fade to 0 within this radius of cursor
+const STOP_DELAY  = 0.45   // seconds of stillness before converging
 
-// ── Types ──────────────────────────────────────────────────────────────────
+// ── Types ───────────────────────────────────────────────────────────────────
 interface FF {
   x: number; y: number; vx: number; vy: number
-  opacity: number
-  r: number       // glow radius
-  hue: number     // HSL hue  (62–80 = firefly yellow-green)
-  phase: number   // oscillation phase offset
-  oa: number      // settled orbit angle
-  or: number      // settled orbit radius
+  op: number      // current rendered opacity
+  r: number       // dot radius 2-3 px
+  hue: number     // firefly warm yellow-green
+  phase: number   // oscillation offset
 }
 
-interface Ring { radius: number; opacity: number }
+type S = "off" | "following" | "converging" | "aura" | "fog"
 
-type State = "off" | "following" | "settling" | "settled"
-
-// ── Helpers ────────────────────────────────────────────────────────────────
-function mkFF(i: number): FF {
-  return {
-    x: -400, y: -400, vx: 0, vy: 0,
-    opacity: 0,
-    r:    5 + Math.random() * 3,
-    hue:  62 + Math.random() * 18,
-    phase: (i / N) * Math.PI * 2,
-    oa:   (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.5,
-    or:   18 + Math.random() * 22,
-  }
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function spawn(cx: number, cy: number): FF[] {
+  return Array.from({ length: N }, (_, i) => {
+    const angle = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 0.7
+    const dist  = 50 + Math.random() * 30
+    return {
+      x: cx + Math.cos(angle) * dist,
+      y: cy + Math.sin(angle) * dist,
+      vx: 0, vy: 0, op: 0,
+      r:     2 + Math.random(),
+      hue:   64 + Math.random() * 16,
+      phase: (i / N) * Math.PI * 2,
+    }
+  })
 }
 
 function belowHero(): boolean {
   return window.scrollY >= window.innerHeight * 0.82
 }
 
-// ── Component ──────────────────────────────────────────────────────────────
+// ── Component ────────────────────────────────────────────────────────────────
 export function FireflyCursor() {
   const cvs   = useRef<HTMLCanvasElement>(null)
   const raf   = useRef(0)
-  const ffs   = useRef<FF[]>(Array.from({ length: N }, (_, i) => mkFF(i)))
-  const mx    = useRef(-400)
-  const my    = useRef(-400)
-  const pmx   = useRef(-400)   // previous mouse X (for move detection)
-  const pmy   = useRef(-400)
-  const state = useRef<State>("off")
-  const stopT = useRef(0)      // seconds since mouse stopped
-  const setT  = useRef(0)      // seconds since settled
-  const rings = useRef<Ring[]>([])
+
+  // All mutable state in refs — no React re-renders
+  const ffs   = useRef<FF[]>([])
+  const mx    = useRef(-400);  const my   = useRef(-400)
+  const pmx   = useRef(-400);  const pmy  = useRef(-400)
+  const state = useRef<S>("off")
+  const stopT = useRef(0)
+  const aura  = useRef<{ r: number; op: number } | null>(null)
+  const fogOp = useRef(0)   // 0–1, fog fade-in progress
   const lastT = useRef(0)
 
   useEffect(() => {
@@ -64,7 +61,6 @@ export function FireflyCursor() {
     ) return
 
     const canvas = cvs.current!
-
     const resize = () => {
       canvas.width  = window.innerWidth
       canvas.height = window.innerHeight
@@ -72,40 +68,40 @@ export function FireflyCursor() {
     resize()
     window.addEventListener("resize", resize)
 
-    // ── Mouse / scroll handlers ───────────────────────────────────────────
+    // ── Event handlers ─────────────────────────────────────────────────────
     const onMove = (e: MouseEvent) => {
-      mx.current = e.clientX
-      my.current = e.clientY
+      mx.current = e.clientX;  my.current = e.clientY
+      const ddx  = e.clientX - pmx.current
+      const ddy  = e.clientY - pmy.current
+      pmx.current = e.clientX; pmy.current = e.clientY
 
-      const moved =
-        Math.abs(e.clientX - pmx.current) > 1.5 ||
-        Math.abs(e.clientY - pmy.current) > 1.5
-      pmx.current = e.clientX
-      pmy.current = e.clientY
+      if (!belowHero()) {
+        if (state.current !== "off") { state.current = "off"; fogOp.current = 0; aura.current = null }
+        return
+      }
 
-      if (!belowHero()) { state.current = "off"; return }
-
+      const moved = ddx * ddx + ddy * ddy > 2
       if (moved) {
+        stopT.current = 0
         if (state.current !== "following") {
           state.current = "following"
-          rings.current = []
-          setT.current  = 0
+          fogOp.current = 0
+          aura.current  = null
+          ffs.current   = spawn(mx.current, my.current)
         }
-        stopT.current = 0   // reset stop timer on every real move
       }
     }
 
     const onScroll = () => {
       if (!belowHero() && state.current !== "off") {
-        state.current = "off"
-        rings.current = []
+        state.current = "off";  fogOp.current = 0;  aura.current = null
       }
     }
 
     window.addEventListener("mousemove", onMove)
     window.addEventListener("scroll",    onScroll, { passive: true })
 
-    // ── Animation loop ────────────────────────────────────────────────────
+    // ── Animation loop ─────────────────────────────────────────────────────
     const tick = (ts: number) => {
       const dt  = Math.min((ts - lastT.current) / 1000, 0.05)
       lastT.current = ts
@@ -117,109 +113,112 @@ export function FireflyCursor() {
       const cx = mx.current
       const cy = my.current
 
-      // ── State transitions ───────────────────────────────────────────────
+      // ── off: fade everything out ──────────────────────────────────────────
+      if (s === "off") {
+        fogOp.current = Math.max(0, fogOp.current - 3 * dt)
+        raf.current = requestAnimationFrame(tick)
+        return
+      }
+
+      // ── following: count stop time ────────────────────────────────────────
       if (s === "following") {
         stopT.current += dt
-        if (stopT.current >= 0.5) {
-          state.current = "settling"
-          setT.current  = 0
-        }
-      } else if (s === "settling") {
-        setT.current += dt
-        if (setT.current >= 0.5) {
-          state.current = "settled"
-          setT.current  = 0
-          rings.current.push({ radius: 0, opacity: 0.75 })
-        }
-      } else if (s === "settled") {
-        setT.current += dt
-        // Spawn a new aura ring every ~1.3 s
-        const prev = setT.current - dt
-        if (Math.floor(setT.current / 1.3) > Math.floor(prev / 1.3)) {
-          rings.current.push({ radius: 0, opacity: 0.55 })
+        if (stopT.current >= STOP_DELAY) state.current = "converging"
+      }
+
+      // ── converging → trigger aura once all gone ───────────────────────────
+      if (s === "converging") {
+        const allGone = ffs.current.length > 0 && ffs.current.every(ff => ff.op < 0.04)
+        if (allGone && !aura.current) {
+          aura.current  = { r: 0, op: 0.85 }
+          state.current = "aura"
         }
       }
 
-      // ── Update & draw each firefly ──────────────────────────────────────
-      for (const ff of ffs.current) {
-        let tx: number, ty: number
-
-        if (s === "off") {
-          // Fade out and park off-screen
-          ff.opacity = Math.max(0, ff.opacity - 4 * dt)
-          if (ff.opacity > 0) drawFF(ctx, ff)
-          continue
-        }
-
-        if (s === "following") {
-          tx = cx; ty = cy
-        } else {
-          // Slowly orbit around cursor while settling / settled
-          const angle = ff.oa + (s === "settled" ? setT.current * 0.22 : 0)
-          tx = cx + Math.cos(angle) * ff.or
-          ty = cy + Math.sin(angle) * ff.or
-        }
-
-        const dx = tx - ff.x
-        const dy = ty - ff.y
-        const d  = Math.sqrt(dx * dx + dy * dy) || 0.01
-
-        // Superlinear spring: F = k · d^1.4 → ease-in feel (slow near, fast far)
-        const fMag = SPRING_K * Math.pow(d, 1.4) / d
-        let  fx   = dx * fMag
-        let  fy   = dy * fMag
-
-        // Velocity damping (proper spring-damper)
-        fx -= ff.vx * DAMP_C
-        fy -= ff.vy * DAMP_C
-
-        // Perpendicular oscillation only while following (arc feel)
-        if (s === "following" && d > 10) {
-          const sinVal = Math.sin(sec * OSC_FREQ + ff.phase)
-          const osc    = sinVal * Math.min(d * 0.35, OSC_AMP)
-          // Rotate 90° from motion direction
-          const nx = dx / d; const ny = dy / d
-          fx += -ny * osc * 1.2
-          fy +=  nx * osc * 1.2
-        }
-
-        ff.vx += fx * dt
-        ff.vy += fy * dt
-        ff.x  += ff.vx * dt
-        ff.y  += ff.vy * dt
-
-        // Target opacity: dimmer when settled (fireflies "merge" into aura)
-        const opT = s === "settled" ? 0.35 : 0.88
-        ff.opacity += (opT - ff.opacity) * Math.min(7 * dt, 1)
-
-        drawFF(ctx, ff)
+      // ── aura: expand once and transition to fog ───────────────────────────
+      if (s === "aura" && aura.current) {
+        aura.current.r  += 88 * dt
+        aura.current.op -= 1.05 * dt
+        if (aura.current.op <= 0) { aura.current = null; state.current = "fog" }
       }
 
-      // ── Aura rings ──────────────────────────────────────────────────────
-      const active = state.current === "settled"
-      for (let i = rings.current.length - 1; i >= 0; i--) {
-        const ring = rings.current[i]
-        ring.radius  += 75 * dt
-        ring.opacity -= 0.5 * dt
-        if (ring.opacity <= 0) { rings.current.splice(i, 1); continue }
+      // ── fog: fade in the mist ─────────────────────────────────────────────
+      if (s === "fog") {
+        fogOp.current = Math.min(1, fogOp.current + 2.5 * dt)
+      }
 
-        if (!active && ring.radius > 40) {
-          // Fade stale rings fast once no longer settled
-          ring.opacity -= 2 * dt
+      // ── Update + draw fireflies ───────────────────────────────────────────
+      const inFF = s === "following" || s === "converging"
+      if (inFF) {
+        for (const ff of ffs.current) {
+          const dx = cx - ff.x
+          const dy = cy - ff.y
+          const d  = Math.sqrt(dx * dx + dy * dy) || 0.01
+
+          // Superlinear spring (先慢後快: weak when near, strong when far)
+          const fMag = 11 * Math.pow(d, 1.35) / d
+          let fx = dx * fMag - ff.vx * 5
+          let fy = dy * fMag - ff.vy * 5
+
+          // Perpendicular arc wobble only while following
+          if (s === "following" && d > 14) {
+            const osc = 11 * Math.sin(sec * 3.0 + ff.phase)
+            fx += -(dy / d) * osc
+            fy +=  (dx / d) * osc
+          }
+
+          ff.vx += fx * dt;  ff.x += ff.vx * dt
+          ff.vy += fy * dt;  ff.y += ff.vy * dt
+
+          // Opacity: full while following; fade to 0 at cursor while converging
+          const tgt = s === "following"
+            ? 0.88
+            : Math.min(1, d / VANISH_DIST) * 0.88
+          ff.op += (tgt - ff.op) * Math.min(9 * dt, 1)
+
+          if (ff.op > 0.02) drawFF(ctx, ff)
         }
+      }
 
-        const ro    = ring.radius
-        const inner = Math.max(0, ro - 18)
-        const outer = ro + 18
-        const grd   = ctx.createRadialGradient(cx, cy, inner, cx, cy, outer)
-        const h     = 68
-        grd.addColorStop(0,   `hsla(${h},95%,62%,0)`)
-        grd.addColorStop(0.35,`hsla(${h},95%,62%,${ring.opacity * 0.5})`)
-        grd.addColorStop(0.55,`hsla(${h},95%,62%,${ring.opacity})`)
-        grd.addColorStop(1,   `hsla(${h},95%,62%,0)`)
+      // ── Draw single aura ring ─────────────────────────────────────────────
+      if (aura.current) {
+        const { r, op } = aura.current
+        const inner = Math.max(0, r - 13)
+        const outer = r + 13
+        const g = ctx.createRadialGradient(cx, cy, inner, cx, cy, outer)
+        g.addColorStop(0,    `hsla(68,95%,65%,0)`)
+        g.addColorStop(0.3,  `hsla(68,95%,65%,${op * 0.4})`)
+        g.addColorStop(0.55, `hsla(68,95%,65%,${op})`)
+        g.addColorStop(1,    `hsla(68,95%,65%,0)`)
         ctx.beginPath()
         ctx.arc(cx, cy, outer, 0, Math.PI * 2)
-        ctx.fillStyle = grd
+        ctx.fillStyle = g
+        ctx.fill()
+      }
+
+      // ── Draw fog at cursor bottom edge ────────────────────────────────────
+      if (fogOp.current > 0.01) {
+        const breathe = 0.75 + 0.25 * Math.sin(sec * 1.6)
+        const base    = fogOp.current * breathe
+
+        // Tight inner glow — sits at bottom of cursor circle (~10px below center)
+        const g1 = ctx.createRadialGradient(cx, cy + 10, 0, cx, cy + 10, 20)
+        g1.addColorStop(0,   `hsla(68,98%,72%,${base * 0.20})`)
+        g1.addColorStop(0.5, `hsla(68,92%,64%,${base * 0.08})`)
+        g1.addColorStop(1,   `hsla(68,88%,58%,0)`)
+        ctx.beginPath()
+        ctx.ellipse(cx, cy + 10, 32, 11, 0, 0, Math.PI * 2)
+        ctx.fillStyle = g1
+        ctx.fill()
+
+        // Wide diffuse haze
+        const g2 = ctx.createRadialGradient(cx, cy + 13, 0, cx, cy + 13, 42)
+        g2.addColorStop(0,   `hsla(68,90%,65%,${base * 0.10})`)
+        g2.addColorStop(0.6, `hsla(68,86%,58%,${base * 0.04})`)
+        g2.addColorStop(1,   `hsla(68,82%,52%,0)`)
+        ctx.beginPath()
+        ctx.ellipse(cx, cy + 13, 58, 18, 0, 0, Math.PI * 2)
+        ctx.fillStyle = g2
         ctx.fill()
       }
 
@@ -246,18 +245,18 @@ export function FireflyCursor() {
   )
 }
 
-// ── Draw one soft-glow firefly ─────────────────────────────────────────────
+// ── Render a single soft-glow firefly dot ────────────────────────────────────
 function drawFF(ctx: CanvasRenderingContext2D, ff: FF) {
-  const gr  = ff.r * 4
-  const grd = ctx.createRadialGradient(ff.x, ff.y, 0, ff.x, ff.y, gr)
-  const a   = ff.opacity
+  const gr  = ff.r * 4.5    // glow radius: 9–14 px (small, cursor-scale)
+  const g   = ctx.createRadialGradient(ff.x, ff.y, 0, ff.x, ff.y, gr)
   const h   = ff.hue
-  grd.addColorStop(0,    `hsla(${h},98%,78%,${a})`)
-  grd.addColorStop(0.2,  `hsla(${h},95%,68%,${a * 0.7})`)
-  grd.addColorStop(0.55, `hsla(${h},90%,58%,${a * 0.18})`)
-  grd.addColorStop(1,    `hsla(${h},80%,50%,0)`)
+  const a   = ff.op
+  g.addColorStop(0,    `hsla(${h},100%,82%,${a})`)
+  g.addColorStop(0.22, `hsla(${h}, 96%,72%,${a * 0.65})`)
+  g.addColorStop(0.55, `hsla(${h}, 90%,62%,${a * 0.14})`)
+  g.addColorStop(1,    `hsla(${h}, 80%,52%,0)`)
   ctx.beginPath()
   ctx.arc(ff.x, ff.y, gr, 0, Math.PI * 2)
-  ctx.fillStyle = grd
+  ctx.fillStyle = g
   ctx.fill()
 }
