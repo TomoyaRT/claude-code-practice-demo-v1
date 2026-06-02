@@ -18,7 +18,10 @@ export function Footer() {
         <p className="text-[--color-text-faint] text-sm font-mono">
           © {year} Tomoya. Built with Next.js &amp; shipped with ♥
         </p>
-        <nav className="flex items-center gap-6" aria-label="Social links">
+        <nav className="flex items-center gap-6" aria-label="Footer links">
+          <a href="#work"     className="text-sm text-[--color-text-muted] hover:text-[--color-accent] transition-colors duration-[--duration-fast]">Work</a>
+          <a href="#services" className="text-sm text-[--color-text-muted] hover:text-[--color-accent] transition-colors duration-[--duration-fast]">Services</a>
+          <a href="#contact"  className="text-sm text-[--color-text-muted] hover:text-[--color-accent] transition-colors duration-[--duration-fast]">Contact</a>
           {socials.map((s) => (
             <a
               key={s.label}
@@ -30,12 +33,6 @@ export function Footer() {
               {s.label}
             </a>
           ))}
-          <a
-            href="mailto:worth22focus3000@gmail.com"
-            className="text-sm text-[--color-text-muted] hover:text-[--color-accent] transition-colors duration-[--duration-fast]"
-          >
-            Email
-          </a>
         </nav>
       </div>
     </footer>

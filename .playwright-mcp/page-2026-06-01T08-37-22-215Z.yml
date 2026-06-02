@@ -1,0 +1,70 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "tomoya." [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Main navigation" [ref=e5]:
+        - link "Work" [ref=e6] [cursor=pointer]:
+          - /url: /work
+        - link "Services" [ref=e7] [cursor=pointer]:
+          - /url: /services
+        - link "Contact" [ref=e8] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e9]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - paragraph [ref=e14]: // contact
+        - heading "Let's Work Together" [level=1] [ref=e15]
+        - paragraph [ref=e16]: Have a project in mind? I'd love to hear about it. Send me a message and I'll get back to you within 1–2 business days.
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - generic [ref=e20]:
+              - generic [ref=e21]: Name*
+              - textbox "Your name" [ref=e22]
+            - generic [ref=e23]:
+              - generic [ref=e24]: Email*
+              - textbox "you@example.com" [ref=e25]
+          - generic [ref=e26]:
+            - generic [ref=e27]: Subject*
+            - textbox "What's this about?" [ref=e28]
+          - generic [ref=e29]:
+            - generic [ref=e30]: Message*
+            - textbox "Tell me about your project…" [ref=e31]
+          - button "Send Message" [ref=e32] [cursor=pointer]
+        - complementary [ref=e33]:
+          - generic [ref=e34]:
+            - paragraph [ref=e35]: Contact Info
+            - list [ref=e36]:
+              - listitem [ref=e37]:
+                - generic [ref=e38]: Email
+                - link "worth22focus3000@gmail.com" [ref=e39] [cursor=pointer]:
+                  - /url: mailto:worth22focus3000@gmail.com
+              - listitem [ref=e40]:
+                - generic [ref=e41]: GitHub
+                - link "github.com/TomoyaRT" [ref=e42] [cursor=pointer]:
+                  - /url: https://github.com/TomoyaRT
+              - listitem [ref=e43]:
+                - generic [ref=e44]: Location
+                - generic [ref=e45]: Tokyo, Japan
+              - listitem [ref=e46]:
+                - generic [ref=e47]: Availability
+                - generic [ref=e48]: Open for projects
+          - paragraph [ref=e50]:
+            - text: "Response time: within 24 hours on weekdays."
+            - text: For urgent matters, use email directly.
+  - contentinfo [ref=e51]:
+    - generic [ref=e52]:
+      - paragraph [ref=e53]: © 2026Tomoya. Built with Next.js & shipped with ♥
+      - navigation "Social links" [ref=e54]:
+        - link "GitHub" [ref=e55] [cursor=pointer]:
+          - /url: https://github.com/TomoyaRT
+        - link "Twitter" [ref=e56] [cursor=pointer]:
+          - /url: https://twitter.com
+        - link "LinkedIn" [ref=e57] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "Email" [ref=e58] [cursor=pointer]:
+          - /url: mailto:worth22focus3000@gmail.com
+  - button "Open Next.js Dev Tools" [ref=e64] [cursor=pointer]:
+    - img [ref=e65]
+  - alert [ref=e68]

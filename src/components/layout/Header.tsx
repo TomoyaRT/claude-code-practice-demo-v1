@@ -1,37 +1,38 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
-interface NavLink {
-  label: string
-  href: string
-}
-
-const navLinks: NavLink[] = [
-  { label: "Work", href: "/work" },
-  { label: "Services", href: "/services" },
-  { label: "Contact", href: "/contact" },
+const NAV: { label: string; href: string; id: string }[] = [
+  { label: "Work",     href: "#work",     id: "work"     },
+  { label: "Services", href: "#services", id: "services" },
+  { label: "Contact",  href: "#contact",  id: "contact"  },
 ]
 
 export function Header() {
-  const pathname = usePathname()
-  const [scrolled, setScrolled] = useState(false)
-  // Store the pathname at which the menu was opened so it auto-closes on navigation
-  const [menuOpenPath, setMenuOpenPath] = useState<string | null>(null)
-
-  const menuOpen = menuOpenPath === pathname
+  const [scrolled,      setScrolled]      = useState(false)
+  const [menuOpen,      setMenuOpen]      = useState(false)
+  const [activeSection, setActiveSection] = useState("")
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 48)
+      // Highlight the section whose top edge has passed 120px from the viewport top
+      const y = window.scrollY + 120
+      let current = ""
+      for (const { id } of NAV) {
+        const el = document.getElementById(id)
+        if (el && el.offsetTop <= y) current = id
+      }
+      setActiveSection(current)
+    }
     window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const toggleMenu = () =>
-    setMenuOpenPath((prev) => (prev === pathname ? null : pathname))
+  const closeMenu = () => setMenuOpen(false)
+  const toggleMenu = () => setMenuOpen((v) => !v)
 
   return (
     <header
@@ -44,29 +45,29 @@ export function Header() {
       )}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
+        {/* Logo → scroll to top */}
+        <a
+          href="#"
           className="font-[family-name:--font-heading] font-bold text-xl text-[--color-text] hover:text-[--color-accent] transition-colors duration-[--duration-fast]"
         >
           tomoya<span className="text-[--color-accent]">.</span>
-        </Link>
+        </a>
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-8" aria-label="Main navigation">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
+          {NAV.map(({ label, href, id }) => (
+            <a
+              key={href}
+              href={href}
               className={cn(
                 "text-sm font-medium tracking-wide transition-colors duration-[--duration-fast]",
-                pathname === link.href
+                activeSection === id
                   ? "text-[--color-accent]"
                   : "text-[--color-text-muted] hover:text-[--color-text]"
               )}
             >
-              {link.label}
-            </Link>
+              {label}
+            </a>
           ))}
         </nav>
 
@@ -77,24 +78,9 @@ export function Header() {
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          <span
-            className={cn(
-              "block w-6 h-0.5 bg-current transition-all duration-[--duration-base]",
-              menuOpen && "rotate-45 translate-y-2"
-            )}
-          />
-          <span
-            className={cn(
-              "block w-6 h-0.5 bg-current transition-all duration-[--duration-fast]",
-              menuOpen && "opacity-0"
-            )}
-          />
-          <span
-            className={cn(
-              "block w-6 h-0.5 bg-current transition-all duration-[--duration-base]",
-              menuOpen && "-rotate-45 -translate-y-2"
-            )}
-          />
+          <span className={cn("block w-6 h-0.5 bg-current transition-all duration-[--duration-base]", menuOpen && "rotate-45 translate-y-2")} />
+          <span className={cn("block w-6 h-0.5 bg-current transition-all duration-[--duration-fast]", menuOpen && "opacity-0")} />
+          <span className={cn("block w-6 h-0.5 bg-current transition-all duration-[--duration-base]", menuOpen && "-rotate-45 -translate-y-2")} />
         </button>
       </div>
 
@@ -102,19 +88,20 @@ export function Header() {
       {menuOpen && (
         <div className="sm:hidden border-t border-[--color-border] bg-[--color-bg]/95 backdrop-blur-md">
           <nav className="flex flex-col px-6 py-4 gap-4" aria-label="Mobile navigation">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
+            {NAV.map(({ label, href, id }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={closeMenu}
                 className={cn(
                   "text-base font-medium py-2 transition-colors duration-[--duration-fast]",
-                  pathname === link.href
+                  activeSection === id
                     ? "text-[--color-accent]"
                     : "text-[--color-text-muted] hover:text-[--color-text]"
                 )}
               >
-                {link.label}
-              </Link>
+                {label}
+              </a>
             ))}
           </nav>
         </div>
