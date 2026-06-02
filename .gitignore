@@ -41,3 +41,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright / test artifacts
+.playwright-mcp/
+*.png
+*.jpeg
+*.jpg
+!public/**/*.png
+!public/**/*.jpg

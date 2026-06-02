@@ -73,7 +73,7 @@ export function Hero() {
             variants={itemVariants}
             className="max-w-xl mx-auto text-lg text-[--color-text-muted] leading-relaxed mb-12"
           >
-            Full-stack engineer specialising in high-performance web apps,
+            Full-stack engineer specializing in high-performance web apps,
             AI integrations, and clean, maintainable code.
           </motion.p>
 
