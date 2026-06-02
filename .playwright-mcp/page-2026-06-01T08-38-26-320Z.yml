@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "tomoya." [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Main navigation" [ref=e5]:
+        - link "Work" [ref=e6] [cursor=pointer]:
+          - /url: /work
+        - link "Services" [ref=e7] [cursor=pointer]:
+          - /url: /services
+        - link "Contact" [ref=e8] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e9]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - paragraph [ref=e14]: // work
+        - heading "Selected Projects" [level=1] [ref=e15]
+        - paragraph [ref=e16]: A selection of projects I've built for clients and as personal explorations — each one a different problem, context, and set of tradeoffs.
+      - generic [ref=e17]:
+        - article [ref=e19]:
+          - generic [ref=e21]:
+            - generic [ref=e22]:
+              - generic [ref=e23]: fullstack
+              - generic [ref=e24]: "2024"
+            - heading "SaaS Analytics Dashboard" [level=3] [ref=e25]
+            - paragraph [ref=e26]: Real-time analytics platform for B2B SaaS companies with custom chart components and WebSocket data streaming.
+            - generic [ref=e27]:
+              - generic [ref=e28]: Next.js
+              - generic [ref=e29]: TypeScript
+              - generic [ref=e30]: PostgreSQL
+              - generic [ref=e31]: Prisma
+              - generic [ref=e32]: WebSocket
+              - generic [ref=e33]: "+2"
+            - generic [ref=e34]:
+              - link "View SaaS Analytics Dashboard on GitHub" [ref=e35] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e36]
+                - text: GitHub
+              - link "View live demo of SaaS Analytics Dashboard" [ref=e38] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e39]
+                - text: Live Demo
+        - article [ref=e42]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - generic [ref=e46]: fullstack
+              - generic [ref=e47]: "2024"
+            - heading "E-Commerce Platform" [level=3] [ref=e48]
+            - paragraph [ref=e49]: High-performance storefront with headless CMS, Stripe payments, and inventory management system.
+            - generic [ref=e50]:
+              - generic [ref=e51]: Next.js
+              - generic [ref=e52]: TypeScript
+              - generic [ref=e53]: Stripe
+              - generic [ref=e54]: Sanity CMS
+              - generic [ref=e55]: Vercel
+              - generic [ref=e56]: "+2"
+            - generic [ref=e57]:
+              - link "View E-Commerce Platform on GitHub" [ref=e58] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e59]
+                - text: GitHub
+              - link "View live demo of E-Commerce Platform" [ref=e61] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e62]
+                - text: Live Demo
+        - article [ref=e65]:
+          - generic [ref=e67]:
+            - generic [ref=e68]:
+              - generic [ref=e69]: fullstack
+              - generic [ref=e70]: "2023"
+            - heading "AI Writing Assistant" [level=3] [ref=e71]
+            - paragraph [ref=e72]: Browser extension and web app that integrates Claude API for context-aware writing suggestions and tone adjustments.
+            - generic [ref=e73]:
+              - generic [ref=e74]: React
+              - generic [ref=e75]: TypeScript
+              - generic [ref=e76]: Claude API
+              - generic [ref=e77]: Chrome Extension
+              - generic [ref=e78]: Node.js
+              - generic [ref=e79]: "+2"
+            - generic [ref=e80]:
+              - link "View AI Writing Assistant on GitHub" [ref=e81] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e82]
+                - text: GitHub
+              - link "View live demo of AI Writing Assistant" [ref=e84] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e85]
+                - text: Live Demo
+        - article [ref=e88]:
+          - generic [ref=e90]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: fullstack
+              - generic [ref=e93]: "2023"
+            - heading "DevOps Monitoring Hub" [level=3] [ref=e94]
+            - paragraph [ref=e95]: Centralized monitoring dashboard aggregating metrics from multiple cloud providers with alerting and on-call scheduling.
+            - generic [ref=e96]:
+              - generic [ref=e97]: React
+              - generic [ref=e98]: TypeScript
+              - generic [ref=e99]: Go
+              - generic [ref=e100]: PostgreSQL
+              - generic [ref=e101]: Grafana API
+              - generic [ref=e102]: "+2"
+            - generic [ref=e103]:
+              - link "View DevOps Monitoring Hub on GitHub" [ref=e104] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e105]
+                - text: GitHub
+              - link "View live demo of DevOps Monitoring Hub" [ref=e107] [cursor=pointer]:
+                - /url: https://github.com/TomoyaRT
+                - img [ref=e108]
+                - text: Live Demo
+  - contentinfo [ref=e110]:
+    - generic [ref=e111]:
+      - paragraph [ref=e112]: © 2026Tomoya. Built with Next.js & shipped with ♥
+      - navigation "Social links" [ref=e113]:
+        - link "GitHub" [ref=e114] [cursor=pointer]:
+          - /url: https://github.com/TomoyaRT
+        - link "Twitter" [ref=e115] [cursor=pointer]:
+          - /url: https://twitter.com
+        - link "LinkedIn" [ref=e116] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "Email" [ref=e117] [cursor=pointer]:
+          - /url: mailto:worth22focus3000@gmail.com
+  - button "Open Next.js Dev Tools" [ref=e123] [cursor=pointer]:
+    - img [ref=e124]
+  - alert [ref=e127]

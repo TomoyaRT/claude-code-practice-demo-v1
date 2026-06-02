@@ -3,8 +3,7 @@
 import { useRef, useEffect } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { PricingGrid } from "@/components/sections/PricingGrid"
-import Link from "next/link"
+import { PricingGrid } from "./PricingGrid"
 import { Button } from "@/components/ui/Button"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -28,81 +27,63 @@ const FAQ_ITEMS = [
   },
 ] as const
 
-export default function ServicesPage() {
+export function ServicesSection() {
   const headingRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-
     const ctx = gsap.context(() => {
-      if (headingRef.current) {
-        gsap.from(headingRef.current.children, {
-          opacity: 0,
-          y: 40,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            once: true,
-          },
-        })
-      }
+      gsap.from(headingRef.current!.children, {
+        opacity: 0, y: 40, duration: 0.9, stagger: 0.12, ease: "power3.out",
+        scrollTrigger: { trigger: headingRef.current, start: "top 85%", once: true },
+      })
     }, headingRef)
-
     return () => ctx.revert()
   }, [])
 
   return (
-    <div className="min-h-screen py-32 px-6">
+    <section id="services" className="py-32 px-6 border-t border-[--color-border]">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div ref={headingRef} className="mb-4">
           <p className="font-mono text-xs tracking-[0.3em] uppercase text-[--color-text-faint] mb-6">
             {"// services"}
           </p>
-          <h1 className="font-[family-name:--font-heading] text-5xl md:text-6xl font-bold text-[--color-text] tracking-tight mb-6">
+          <h2 className="font-[family-name:--font-heading] text-5xl md:text-6xl font-bold text-[--color-text] tracking-tight mb-6">
             How I Work
-          </h1>
+          </h2>
           <p className="max-w-2xl text-[--color-text-muted] text-lg leading-relaxed">
             Transparent pricing, no surprises. Each engagement is scoped upfront
             so you know exactly what you&apos;re getting and when.
           </p>
         </div>
 
-        {/* Pricing grid */}
         <PricingGrid />
 
-        {/* FAQ-style note */}
         <div className="mt-20 border-t border-[--color-border] pt-12">
-          <h2 className="font-[family-name:--font-heading] text-2xl font-bold text-[--color-text] mb-8">
+          <h3 className="font-[family-name:--font-heading] text-2xl font-bold text-[--color-text] mb-8">
             Common Questions
-          </h2>
+          </h3>
           <div className="grid md:grid-cols-2 gap-8">
             {FAQ_ITEMS.map((item) => (
               <div key={item.q} className="flex flex-col gap-2">
-                <h3 className="font-[family-name:--font-heading] font-semibold text-[--color-text]">
+                <h4 className="font-[family-name:--font-heading] font-semibold text-[--color-text]">
                   {item.q}
-                </h3>
+                </h4>
                 <p className="text-sm text-[--color-text-muted] leading-relaxed">{item.a}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <p className="text-[--color-text-muted] mb-6 text-lg">
             Not sure which plan fits? Let&apos;s talk it through.
           </p>
-          <Link href="/contact">
-            <Button variant="primary" size="lg">
-              Start a Conversation
-            </Button>
-          </Link>
+          <a href="#contact">
+            <Button variant="primary" size="lg">Start a Conversation</Button>
+          </a>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

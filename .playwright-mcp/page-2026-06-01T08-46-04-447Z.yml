@@ -1,0 +1,77 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "tomoya." [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation "Main navigation" [ref=e5]:
+        - link "Work" [ref=e6] [cursor=pointer]:
+          - /url: /work
+        - link "Services" [ref=e7] [cursor=pointer]:
+          - /url: /services
+        - link "Contact" [ref=e8] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e13]:
+          - paragraph [ref=e14]: Software Freelancer
+          - heading "Building Digital Products." [level=1] [ref=e15]:
+            - text: Building
+            - text: Digital
+            - text: Products.
+          - paragraph [ref=e16]: Full-stack engineer specialising in high-performance web apps, AI integrations, and clean, maintainable code.
+          - generic [ref=e17]:
+            - link "View My Work" [ref=e18] [cursor=pointer]:
+              - /url: /work
+              - button "View My Work" [ref=e19]
+            - link "Get in Touch" [ref=e20] [cursor=pointer]:
+              - /url: /contact
+              - button "Get in Touch" [ref=e21]
+        - generic [ref=e22]:
+          - generic [ref=e23]: scroll
+          - img [ref=e25]
+      - generic [ref=e28]:
+        - paragraph [ref=e29]: // about
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - heading "Who I Am" [level=2] [ref=e32]
+            - paragraph [ref=e33]: I'm a software freelancer with 5+ years of experience building production-grade web applications for startups and scale-ups. I specialise in the full stack — from database schema to pixel-perfect UI.
+            - paragraph [ref=e34]: "My focus is on delivering fast, accessible, and maintainable software. I work best as a technical partner: someone who understands both the business problem and the engineering tradeoffs needed to solve it well."
+            - paragraph [ref=e35]: Currently available for project-based engagements and long-term collaborations. Based in Japan, working with clients worldwide.
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Tech Stack
+            - generic [ref=e38]:
+              - generic [ref=e39]: TypeScript
+              - generic [ref=e40]: Next.js
+              - generic [ref=e41]: React
+              - generic [ref=e42]: Node.js
+              - generic [ref=e43]: PostgreSQL
+              - generic [ref=e44]: Prisma
+              - generic [ref=e45]: GraphQL
+              - generic [ref=e46]: REST APIs
+              - generic [ref=e47]: Tailwind CSS
+              - generic [ref=e48]: Framer Motion
+              - generic [ref=e49]: Three.js
+              - generic [ref=e50]: GSAP
+              - generic [ref=e51]: Docker
+              - generic [ref=e52]: Vercel
+              - generic [ref=e53]: AWS
+              - generic [ref=e54]: Git
+              - generic [ref=e55]: Zod
+              - generic [ref=e56]: tRPC
+              - generic [ref=e57]: Stripe
+              - generic [ref=e58]: Resend
+  - contentinfo [ref=e59]:
+    - generic [ref=e60]:
+      - paragraph [ref=e61]: © 2026Tomoya. Built with Next.js & shipped with ♥
+      - navigation "Social links" [ref=e62]:
+        - link "GitHub" [ref=e63] [cursor=pointer]:
+          - /url: https://github.com/TomoyaRT
+        - link "Twitter" [ref=e64] [cursor=pointer]:
+          - /url: https://twitter.com
+        - link "LinkedIn" [ref=e65] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "Email" [ref=e66] [cursor=pointer]:
+          - /url: mailto:worth22focus3000@gmail.com
+  - button "Open Next.js Dev Tools" [ref=e72] [cursor=pointer]:
+    - img [ref=e73]

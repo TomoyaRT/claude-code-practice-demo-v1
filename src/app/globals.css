@@ -95,6 +95,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;   /* clear fixed header on anchor jump */
   color-scheme: dark;
 }
 
